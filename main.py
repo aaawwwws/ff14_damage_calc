@@ -2,6 +2,8 @@ from decimal import Decimal
 from typing import List, Dict
 import math
 
+from sqlalchemy import null
+
 [Main, WD, CRIT, DH, DET, TNC] = [
     "メインステータス",
     "ウェポンダメージ",
@@ -14,7 +16,12 @@ import math
 
 def INPUT(List):
     print(f"{List}を入力してください")
-    return input()
+    Status = input()
+    if not Status:
+        print("入力されていません。")
+        return input()
+    else:
+        return Status
 
 
 class Damage_Calc:
@@ -71,6 +78,8 @@ const = Damage_Calc(
     INPUT(Main), INPUT(WD), INPUT(CRIT), INPUT(DH), INPUT(DET), INPUT(TNC)
 )
 
-print(
-    f"クリティカル発生率{const.Crit_Rate()}%,クリティカル倍率{ const.Crit_Damage()}%ダイレクトヒット発生率{const.DH_Damage()}%"
-)
+
+def Main():
+    print(
+        f"クリティカル発生率{const.Crit_Rate()}%,クリティカル倍率{ const.Crit_Damage()}%ダイレクトヒット発生率{const.DH_Damage()}%"
+    )
