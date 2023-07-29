@@ -1,4 +1,4 @@
-[Main, WD, CRIT, DH, DET, TNC] = [
+[main, WD, CRIT, DH, DET, TNC]:list[str] = [
     "メインステータス",
     "ウェポンダメージ",
     "クリティカル",
@@ -6,3 +6,5 @@
     "意志力",
     "不屈",
 ]
+
+Sta_Lists = [main, WD, CRIT, DH, DET, TNC]

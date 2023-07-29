@@ -1,27 +1,7 @@
 from decimal import Decimal
 from typing import List, Dict
-import math
-
-from sqlalchemy import null
-
-[Main, WD, CRIT, DH, DET, TNC] = [
-    "メインステータス",
-    "ウェポンダメージ",
-    "クリティカル",
-    "ダイレクトヒット",
-    "意志力",
-    "不屈",
-]
-
-
-def INPUT(List):
-    print(f"{List}を入力してください")
-    Status = input()
-    if not Status:
-        print("入力されていません。")
-        return input()
-    else:
-        return Status
+from sub_status import main, WD, CRIT, DH, DET, TNC, Sta_Lists
+from input import INPUT
 
 
 class Damage_Calc:
@@ -45,7 +25,7 @@ class Damage_Calc:
 
         # クリティカル発生率
 
-    def Crit_Rate(self):
+    def Crit_Rate(self) -> float:
         Result = Decimal(
             (200 * (self.CRIT - self.default["LvSub"]) / self.default["LvDiv"] + 50)
             / 10
@@ -56,7 +36,7 @@ class Damage_Calc:
 
         # クリティカルダメージ
 
-    def Crit_Damage(self):
+    def Crit_Damage(self) -> float:
         Result = Decimal(
             (200 * (self.CRIT - self.default["LvSub"]) / self.default["LvDiv"] + 1400)
             / 10
@@ -66,7 +46,7 @@ class Damage_Calc:
 
         # ダイレクトヒットダメージ
 
-    def DH_Damage(self):
+    def DH_Damage(self) -> float:
         Result = Decimal(
             550 * (self.DH - self.default["LvSub"]) / self.default["LvDiv"] / 10
         )
@@ -74,12 +54,22 @@ class Damage_Calc:
         return Result_floor
 
 
-const = Damage_Calc(
-    INPUT(Main), INPUT(WD), INPUT(CRIT), INPUT(DH), INPUT(DET), INPUT(TNC)
-)
+MAIN: int = INPUT(main)
+WD: int = INPUT(WD)
+CRIT: int = INPUT(CRIT)
+DH: int = INPUT(DH)
+DET: int = INPUT(DET)
+TNC: int = INPUT(TNC)
 
 
-def Main():
-    print(
-        f"クリティカル発生率{const.Crit_Rate()}%,クリティカル倍率{ const.Crit_Damage()}%ダイレクトヒット発生率{const.DH_Damage()}%"
-    )
+def Main_func():
+    const = Damage_Calc(MAIN, WD, CRIT, DH, DET, TNC)
+    try:
+        print(
+            f"クリティカル発生率{const.Crit_Rate()}%,クリティカル倍率{ const.Crit_Damage()}%ダイレクトヒット発生率{const.DH_Damage()}%"
+        )
+    except ValueError as e:
+        print(e)
+
+
+Main_func()
