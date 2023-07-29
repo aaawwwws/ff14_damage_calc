@@ -1,6 +1,6 @@
 from decimal import Decimal
 from typing import List, Dict
-from sub_status import main, WD, CRIT, DH, DET, TNC, Sta_Lists
+from sub_status import MAIN, WD, CRIT, DH, DET, TNC, Sta_Lists
 from input import INPUT
 
 
@@ -54,16 +54,16 @@ class Damage_Calc:
         return Result_floor
 
 
-MAIN: int = INPUT(main)
-WD: int = INPUT(WD)
-CRIT: int = INPUT(CRIT)
-DH: int = INPUT(DH)
-DET: int = INPUT(DET)
-TNC: int = INPUT(TNC)
+Main_sta: int = INPUT(MAIN)
+Wd_sta: int = INPUT(WD)
+Crit_sta: int = INPUT(CRIT)
+DH_sta: int = INPUT(DH)
+Det_sta: int = INPUT(DET)
+Tnc_sta: int = INPUT(TNC)
 
 
 def Main_func():
-    const = Damage_Calc(MAIN, WD, CRIT, DH, DET, TNC)
+    const = Damage_Calc(Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta)
     try:
         print(
             f"クリティカル発生率{const.Crit_Rate()}%,クリティカル倍率{ const.Crit_Damage()}%ダイレクトヒット発生率{const.DH_Damage()}%"
