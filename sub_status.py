@@ -4,5 +4,5 @@ CRIT = "クリティカル"
 DH = "ダイレクトヒット"
 DET = "意志力"
 TNC = "不屈"
-
-Sta_Lists = [MAIN, WD, CRIT, DH, DET, TNC]
+SD = "スキルの威力"
+Sta_Lists = [MAIN, WD, CRIT, DH, DET, TNC, SD]
