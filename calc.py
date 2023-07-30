@@ -1,8 +1,6 @@
 from decimal import Decimal
 from input import Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta
 import math
-from calc import Skill_Damage
-from input import Input
 
 
 class Damage_Calc:
