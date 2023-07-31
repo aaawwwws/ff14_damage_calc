@@ -1,44 +1,34 @@
 from typing import List
-from input_ import Roll_status, INPUT
-from calc_ import Damage_Calc, Skill_Damage
-from sub_status import Status, SD
+from input_ import INPUT, load
+from calc_ import Skill_Damage
+from sub_status import SD
 
 
 def main():
-    [Trait, Attribute] = Roll_status()
-    [Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta] = Status()
-    # Damage_calc インスタンス化
-    instance = Damage_Calc(
-        Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta, Attribute
-    )
-
-    # 攻撃魔法威力
-    Atack_Rate = instance.Atack_Rate()
-
-    # 武器基本性能
-    WD_Damage = instance.WD_Damage()
-
-    # クリティカル発生率
-    Crit_Rate = instance.Crit_Rate()
-
-    # クリティカルダメージ
-    Crit_Damage = instance.Crit_Damage()
-
-    # ダイレクトヒット
-    DH_Rate = instance.DH_Rate()
-
-    # 意志力ダメージ
-    DET_Damage = instance.DET_Damage()
-
-    # 不屈ダメージ
-    TNC_Damage = instance.TNC_Damage()
+    [
+        Atack_Rate,
+        WD_Damage,
+        Crit_Rate,
+        Crit_Damage,
+        DH_Rate,
+        DET_Damage,
+        TNC_Damage,
+        Trait,
+        Attribute,
+    ] = load()
 
     # D2インスタンス化
     skill_damage = Skill_Damage(
         INPUT(SD), Trait, Attribute, Atack_Rate, DET_Damage, WD_Damage, TNC_Damage
     )
+
     D1 = skill_damage.D1()
-    print(skill_damage.D2(D1))
+    D2: int = skill_damage.D2(D1)
+    print(D2)
+
+    for i in range(10):
+        D2_random = skill_damage.D2_Random(D2)
+        print(i, D2_random)
 
 
 main()

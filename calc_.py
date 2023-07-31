@@ -1,5 +1,6 @@
 from decimal import Decimal
 import math
+import random
 
 
 class Damage_Calc:
@@ -119,3 +120,11 @@ class Skill_Damage:
         Result = Decimal(D1 * self.TNC / 1000 * self.WD / 100 * self.Trait / 100)
         D2_Final_Result: int = math.floor(Result)
         return D2_Final_Result
+
+    def D2_Random(self, D2: int) -> int:
+        Value: int = D2
+        low = Value * 0.9
+        up = Value * 1.1
+        Result = Decimal(random.uniform(low, up))
+        Final_Result: int = math.floor(Result)
+        return Final_Result

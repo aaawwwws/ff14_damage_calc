@@ -1,4 +1,29 @@
 from typing import List
+import json
+from calc_ import Damage_Calc
+
+
+filename = "./Preset/test.json"
+
+MAIN = "メインステータス"
+WD = "ウェポンダメージ"
+CRIT = "クリティカル"
+DH = "ダイレクトヒット"
+DET = "意志力"
+TNC = "不屈"
+SD = "スキルの威力"
+Sta_Lists = [MAIN, WD, CRIT, DH, DET, TNC, SD]
+
+
+def Status() -> List[int]:
+    Main_sta: int = INPUT(MAIN)
+    Wd_sta: int = INPUT(WD)
+    Crit_sta: int = INPUT(CRIT)
+    DH_sta: int = INPUT(DH)
+    Det_sta: int = INPUT(DET)
+    Tnc_sta: int = INPUT(TNC)
+    # Skill__damage: int = INPUT(SD)
+    return [Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta]
 
 
 # 入力時の処理
@@ -33,16 +58,16 @@ def Roll_status() -> List[int]:
             Attribute: int = 100
             break
         # キャスターの処理
-        if Roll == "c":
+        elif Roll == "c":
             Trait: int = 130
             Attribute: int = 100
             break
         # ヒーラーの処理
-        if Roll == "h":
+        elif Roll == "h":
             Trait: int = 130
             Attribute: int = 115
             break
-        if num == 4:
+        elif num == 4:
             raise ValueError("error")
         else:
             print("入力されいません。")
@@ -50,3 +75,207 @@ def Roll_status() -> List[int]:
             Roll = input()
             num += 1
     return [Trait, Attribute]
+
+
+# プリセット保存
+def Preset(Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta, Trait, Attribute):
+    num = 0
+    print("ステータスを保存しますか？ y/n")
+    select = input()
+    while True:
+        if select == "y":
+            Save = {
+                "pre1": [
+                    Main_sta,
+                    Wd_sta,
+                    Crit_sta,
+                    DH_sta,
+                    Det_sta,
+                    Tnc_sta,
+                    Trait,
+                    Attribute,
+                ],
+            }
+            with open(filename, "r") as f:
+                read_data = json.load(f)
+            if read_data == []:
+                with open(filename, "w") as f:
+                    json.dump([Save], f)
+            else:
+                with open(filename, "w") as f:
+                    Data = [read_data, Save]
+                    json.dump(Data, f)
+            print("保存に成功しました。")
+            return
+        elif select == "n":
+            print("保存がキャンセルされました。")
+            return
+        elif num == int(4):
+            raise ValueError("処理を終了")
+        else:
+            print("入力が不正です。")
+            num += 1
+            select = input()
+
+
+# 読み込み
+def load():
+    num = 0
+    with open(filename, "r") as f:
+        read_data = json.load(f)
+        if read_data == []:
+            [Trait, Attribute] = Roll_status()
+            [Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta] = Status()
+            # Damage_calc インスタンス化
+            instance = Damage_Calc(
+                Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta, Attribute
+            )
+            Preset(
+                Main_sta,
+                Wd_sta,
+                Crit_sta,
+                DH_sta,
+                Det_sta,
+                Tnc_sta,
+                Trait,
+                Attribute,
+            )
+            # 攻撃魔法威力
+            Atack_Rate = instance.Atack_Rate()
+
+            # 武器基本性能
+            WD_Damage = instance.WD_Damage()
+
+            # クリティカル発生率
+            Crit_Rate = instance.Crit_Rate()
+
+            # クリティカルダメージ
+            Crit_Damage = instance.Crit_Damage()
+
+            # ダイレクトヒット
+            DH_Rate = instance.DH_Rate()
+
+            # 意志力ダメージ
+            DET_Damage = instance.DET_Damage()
+
+            # 不屈ダメージ
+            TNC_Damage = instance.TNC_Damage()
+            return [
+                Atack_Rate,
+                WD_Damage,
+                Crit_Rate,
+                Crit_Damage,
+                DH_Rate,
+                DET_Damage,
+                TNC_Damage,
+                Trait,
+                Attribute,
+            ]
+        else:
+            print("プリセットを読み込みますか？ y/n")
+            Select = input()
+            while True:
+                if Select == "y":
+                    print(read_data[0]["pre1"][0])
+                    print("読み込みを完了しました")
+                    Main_sta = int(read_data[0]["pre1"][0])
+                    Wd_sta = int(read_data[0]["pre1"][1])
+                    Crit_sta = int(read_data[0]["pre1"][2])
+                    DH_sta = int(read_data[0]["pre1"][3])
+                    Det_sta = int(read_data[0]["pre1"][4])
+                    Tnc_sta = int(read_data[0]["pre1"][5])
+                    Trait = int(read_data[0]["pre1"][6])
+                    Attribute = int(read_data[0]["pre1"][7])
+                    instance = Damage_Calc(
+                        Main_sta,
+                        Wd_sta,
+                        Crit_sta,
+                        DH_sta,
+                        Det_sta,
+                        Tnc_sta,
+                        Attribute,
+                    )
+                    Atack_Rate = instance.Atack_Rate()
+
+                    # 武器基本性能
+                    WD_Damage = instance.WD_Damage()
+
+                    # クリティカル発生率
+                    Crit_Rate = instance.Crit_Rate()
+
+                    # クリティカルダメージ
+                    Crit_Damage = instance.Crit_Damage()
+
+                    # ダイレクトヒット
+                    DH_Rate = instance.DH_Rate()
+
+                    # 意志力ダメージ
+                    DET_Damage = instance.DET_Damage()
+
+                    # 不屈ダメージ
+                    TNC_Damage = instance.TNC_Damage()
+                    return [
+                        Atack_Rate,
+                        WD_Damage,
+                        Crit_Rate,
+                        Crit_Damage,
+                        DH_Rate,
+                        DET_Damage,
+                        TNC_Damage,
+                        Trait,
+                        Attribute,
+                    ]
+                elif Select == "n":
+                    [Trait, Attribute] = Roll_status()
+                    [Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta] = Status()
+                    # Damage_calc インスタンス化
+                    instance = Damage_Calc(
+                        Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta, Attribute
+                    )
+                    Preset(
+                        Main_sta,
+                        Wd_sta,
+                        Crit_sta,
+                        DH_sta,
+                        Det_sta,
+                        Tnc_sta,
+                        Trait,
+                        Attribute,
+                    )
+                    # 攻撃魔法威力
+                    Atack_Rate = instance.Atack_Rate()
+
+                    # 武器基本性能
+                    WD_Damage = instance.WD_Damage()
+
+                    # クリティカル発生率
+                    Crit_Rate = instance.Crit_Rate()
+
+                    # クリティカルダメージ
+                    Crit_Damage = instance.Crit_Damage()
+
+                    # ダイレクトヒット
+                    DH_Rate = instance.DH_Rate()
+
+                    # 意志力ダメージ
+                    DET_Damage = instance.DET_Damage()
+
+                    # 不屈ダメージ
+                    TNC_Damage = instance.TNC_Damage()
+                    return [
+                        Atack_Rate,
+                        WD_Damage,
+                        Crit_Rate,
+                        Crit_Damage,
+                        DH_Rate,
+                        DET_Damage,
+                        TNC_Damage,
+                        Trait,
+                        Attribute,
+                    ]
+                elif num == 4:
+                    raise ValueError("処理を終了")
+                else:
+                    print("入力が不正です。")
+                    num += 1
+                    Select = input()
