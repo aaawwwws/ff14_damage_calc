@@ -1,11 +1,17 @@
 from decimal import Decimal
-from input import Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta
 import math
 
 
 class Damage_Calc:
     def __init__(
-        self, Main_Status: int, WP_Damage: int, CRIT: int, DH: int, DET: int, TNC: int
+        self,
+        Main_Status: int,
+        WP_Damage: int,
+        CRIT: int,
+        DH: int,
+        DET: int,
+        TNC: int,
+        Attribute: int,
     ) -> None:
         # メインステータス(STR)とかの値を取る
         self.Main_Status: int = int(Main_Status)
@@ -16,6 +22,7 @@ class Damage_Calc:
         self.DH: int = int(DH)
         self.DET: int = int(DET)
         self.TNC: int = int(TNC)
+        self.ttribute: int = int(Attribute)
         self.default: dict[str, int] = {
             "LvMain": int(390),
             "LvSub": int(400),
@@ -87,22 +94,26 @@ class Damage_Calc:
 
 
 # さらちゃんブログの式を参照してください
-class Skill_Damage(Damage_Calc):
-    def __init__(self, Potency: int, Trait: int, Attribute) -> None:
+class Skill_Damage:
+    def __init__(
+        self, Potency: int, Trait: int, Attribute, ATK: int, DET: int, WD: int, TNC: int
+    ) -> None:
         self.Potency: int = Potency
-        self.Status = Damage_Calc(Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta)
-        self.ATK: int = int(self.Status.Atack_Rate())
-        self.DET: int = int(self.Status.DET_Damage())
-        self.WD: int = int(self.Status.WD_Damage(Attribute))
-        self.TNC: int = int(self.Status.TNC_Damage())
         self.Trait: int = int(Trait)
+        self.Attribute: int = Attribute
+        self.ATK: int = ATK
+        self.DET: int = DET
+        self.WD: int = WD
+        self.TNC: int = TNC
 
-    def D1(self) -> int:
+    def D1(
+        self,
+    ) -> int:
         D1_Result: int = Decimal(self.Potency * self.ATK * self.DET / 100 / 1000)
         D1_Final_Result: int = math.floor(D1_Result)
         return D1_Final_Result
 
-    def D2(self, D1: int) -> int:
+    def D2(self, D1) -> int:
         Result = Decimal(D1 * self.TNC / 1000 * self.WD / 100 * self.Trait / 100)
         D2_Final_Result: int = math.floor(Result)
         return D2_Final_Result

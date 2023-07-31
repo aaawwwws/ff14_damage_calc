@@ -1,38 +1,15 @@
-from typing import List, Dict
-from calc import Skill_Damage
-from input import Skill_damage
+from typing import List
+from input_ import Roll_status
+from calc_ import Damage_Calc
+from sub_status import Status
 
 
-class Input:
-    @staticmethod
-    def Roll():
-        num = 0
-        try:
-            print("近接ですか？キャスターですか？ヒーラーですか？ m/c/h で入力してください。")
-            Roll_bool = input()
-            while True:
-                if Roll_bool == "m":
-                    insntace = Skill_Damage(Skill_damage, 100, 100)
-                    break
-                if Roll_bool == "c":
-                    insntace = Skill_Damage(Skill_damage, 130, 100)
-                    break
-                if Roll_bool == "h":
-                    insntace = Skill_Damage(Skill_damage, 130, 115)
-                    break
-                if num == 4:
-                    raise ValueError("error")
-                else:
-                    print("入力されいません。")
-                    print("近接ですか？キャスターですか？ヒーラーですか？ m/c/h で入力してください。")
-                    Roll_bool = input()
-                    num += 1
-
-            D1 = int(insntace.D1())
-            D2 = insntace.D2(D1)
-            print(D2)
-        except ValueError as e:
-            print(e)
+def main():
+    [Trait, Attribute] = Roll_status()
+    [Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta, Skill__damage] = Status()
+    instance = Damage_Calc(
+        Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta, Skill__damage, Attribute
+    )
 
 
-Input.Roll()
+main()
