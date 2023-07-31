@@ -15,6 +15,73 @@ SD = "スキルの威力"
 Sta_Lists = [MAIN, WD, CRIT, DH, DET, TNC, SD]
 
 
+def Preset_y(read_data):
+    num = 0
+    print("どのプリセットを読み込みますか？")
+    print(read_data)
+    preset = int(input("数字で入力してください。"))
+    length: int = len(read_data)
+    while True:
+        if preset < length:
+            prest_name = f"pre{preset}"
+            print("読み込みを完了しました")
+            Main_sta = int(read_data[preset][prest_name][0])
+            Wd_sta = int(read_data[preset][prest_name][1])
+            Crit_sta = int(read_data[preset][prest_name][2])
+            DH_sta = int(read_data[preset][prest_name][3])
+            Det_sta = int(read_data[preset][prest_name][4])
+            Tnc_sta = int(read_data[preset][prest_name][5])
+            Trait = int(read_data[preset][prest_name][6])
+            Attribute = int(read_data[preset][prest_name][7])
+            instance = Damage_Calc(
+                Main_sta,
+                Wd_sta,
+                Crit_sta,
+                DH_sta,
+                Det_sta,
+                Tnc_sta,
+                Attribute,
+            )
+
+            Atack_Rate = instance.Atack_Rate()
+
+            WD_Damage = instance.WD_Damage()
+            # 武器基本性能
+
+            # クリティカル発生率
+            Crit_Rate = instance.Crit_Rate()
+
+            # クリティカルダメージ
+            Crit_Damage = instance.Crit_Damage()
+
+            # ダイレクトヒット
+            DH_Rate = instance.DH_Rate()
+
+            # 意志力ダメージ
+            DET_Damage = instance.DET_Damage()
+
+            # 不屈ダメージ
+            TNC_Damage = instance.TNC_Damage()
+            return [
+                Atack_Rate,
+                WD_Damage,
+                Crit_Rate,
+                Crit_Damage,
+                DH_Rate,
+                DET_Damage,
+                TNC_Damage,
+                Trait,
+                Attribute,
+            ]
+        elif num == 4:
+            raise ValueError("処理を終了。")
+        else:
+            print("入力が不正です。")
+            num += 1
+            print(read_data)
+            preset = int(input("数字で入力してください。"))
+
+
 def Status() -> List[int]:
     Main_sta: int = INPUT(MAIN)
     Wd_sta: int = INPUT(WD)
@@ -82,40 +149,44 @@ def Preset(Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta, Trait, Attribut
     num = 0
     print("ステータスを保存しますか？ y/n")
     select = input()
-    while True:
-        if select == "y":
-            Save = {
-                "pre1": [
-                    Main_sta,
-                    Wd_sta,
-                    Crit_sta,
-                    DH_sta,
-                    Det_sta,
-                    Tnc_sta,
-                    Trait,
-                    Attribute,
-                ],
-            }
-            with open(filename, "r") as f:
-                read_data = json.load(f)
-            if read_data == []:
-                with open(filename, "w") as f:
-                    json.dump([Save], f)
+    with open(filename, "r") as f:
+        data = json.load(f)
+        length = len(data)
+        Preset_Name = f"pre{length}"
+        while True:
+            if select == "y":
+                Save = {
+                    Preset_Name: [
+                        Main_sta,
+                        Wd_sta,
+                        Crit_sta,
+                        DH_sta,
+                        Det_sta,
+                        Tnc_sta,
+                        Trait,
+                        Attribute,
+                    ],
+                }
+                with open(filename, "r") as f:
+                    read_data = json.load(f)
+                if read_data == []:
+                    with open(filename, "w") as f:
+                        json.dump(Save, f)
+                else:
+                    with open(filename, "w") as f:
+                        Data = [read_data, Save]
+                        json.dump(Data, f)
+                print("保存に成功しました。")
+                return
+            elif select == "n":
+                print("保存がキャンセルされました。")
+                return
+            elif num == int(4):
+                raise ValueError("処理を終了")
             else:
-                with open(filename, "w") as f:
-                    Data = [read_data, Save]
-                    json.dump(Data, f)
-            print("保存に成功しました。")
-            return
-        elif select == "n":
-            print("保存がキャンセルされました。")
-            return
-        elif num == int(4):
-            raise ValueError("処理を終了")
-        else:
-            print("入力が不正です。")
-            num += 1
-            select = input()
+                print("入力が不正です。")
+                num += 1
+                select = input()
 
 
 # 読み込み
@@ -176,55 +247,7 @@ def load():
             Select = input()
             while True:
                 if Select == "y":
-                    print(read_data[0]["pre1"][0])
-                    print("読み込みを完了しました")
-                    Main_sta = int(read_data[0]["pre1"][0])
-                    Wd_sta = int(read_data[0]["pre1"][1])
-                    Crit_sta = int(read_data[0]["pre1"][2])
-                    DH_sta = int(read_data[0]["pre1"][3])
-                    Det_sta = int(read_data[0]["pre1"][4])
-                    Tnc_sta = int(read_data[0]["pre1"][5])
-                    Trait = int(read_data[0]["pre1"][6])
-                    Attribute = int(read_data[0]["pre1"][7])
-                    instance = Damage_Calc(
-                        Main_sta,
-                        Wd_sta,
-                        Crit_sta,
-                        DH_sta,
-                        Det_sta,
-                        Tnc_sta,
-                        Attribute,
-                    )
-                    Atack_Rate = instance.Atack_Rate()
-
-                    # 武器基本性能
-                    WD_Damage = instance.WD_Damage()
-
-                    # クリティカル発生率
-                    Crit_Rate = instance.Crit_Rate()
-
-                    # クリティカルダメージ
-                    Crit_Damage = instance.Crit_Damage()
-
-                    # ダイレクトヒット
-                    DH_Rate = instance.DH_Rate()
-
-                    # 意志力ダメージ
-                    DET_Damage = instance.DET_Damage()
-
-                    # 不屈ダメージ
-                    TNC_Damage = instance.TNC_Damage()
-                    return [
-                        Atack_Rate,
-                        WD_Damage,
-                        Crit_Rate,
-                        Crit_Damage,
-                        DH_Rate,
-                        DET_Damage,
-                        TNC_Damage,
-                        Trait,
-                        Attribute,
-                    ]
+                    return Preset_y(read_data)
                 elif Select == "n":
                     [Trait, Attribute] = Roll_status()
                     [Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta] = Status()
