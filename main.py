@@ -29,6 +29,7 @@ def main():
     for i in range(10):
         D2_random = skill_damage.D2_Random(D2)
         print(i, D2_random)
+    input("press close to exit")
 
 
 main()
