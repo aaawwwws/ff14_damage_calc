@@ -22,7 +22,7 @@ class Damage_Calc:
         self.DH: int = int(DH)
         self.DET: int = int(DET)
         self.TNC: int = int(TNC)
-        self.ttribute: int = int(Attribute)
+        self.Attribute: int = int(Attribute)
         self.default: dict[str, int] = {
             "LvMain": int(390),
             "LvSub": int(400),
@@ -40,8 +40,10 @@ class Damage_Calc:
 
         # 武器基本性能
 
-    def WD_Damage(self, Attribute):
-        Result = Decimal((self.default["LvMain"] * Attribute / 1000) + self.WP_Damage)
+    def WD_Damage(self):
+        Result = Decimal(
+            (self.default["LvMain"] * self.Attribute / 1000) + self.WP_Damage
+        )
         F_Result = math.floor(Result)
         return F_Result
         # クリティカル発生率
@@ -98,13 +100,13 @@ class Skill_Damage:
     def __init__(
         self, Potency: int, Trait: int, Attribute, ATK: int, DET: int, WD: int, TNC: int
     ) -> None:
-        self.Potency: int = Potency
+        self.Potency: int = int(Potency)
         self.Trait: int = int(Trait)
-        self.Attribute: int = Attribute
-        self.ATK: int = ATK
-        self.DET: int = DET
-        self.WD: int = WD
-        self.TNC: int = TNC
+        self.Attribute: int = int(Attribute)
+        self.ATK: int = int(ATK)
+        self.DET: int = int(DET)
+        self.WD: int = int(WD)
+        self.TNC: int = int(TNC)
 
     def D1(
         self,

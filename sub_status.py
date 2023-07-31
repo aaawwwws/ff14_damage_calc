@@ -18,5 +18,5 @@ def Status() -> List[int]:
     DH_sta: int = INPUT(DH)
     Det_sta: int = INPUT(DET)
     Tnc_sta: int = INPUT(TNC)
-    Skill__damage: int = INPUT(SD)
-    return [Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta, Skill__damage]
+    # Skill__damage: int = INPUT(SD)
+    return [Main_sta, Wd_sta, Crit_sta, DH_sta, Det_sta, Tnc_sta]
